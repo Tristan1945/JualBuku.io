@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #000;
+    --surface: #0a0a0a;
+    --surface-2: #101010;
+    --surface-3: #161616;
+    --border: #191919;
+    --border-2: #242424;
+    --text: #ededed;
+    --text-2: #8a8a8a;
+    --text-3: #565656;
+    --text-4: #333;
+    --green: #4ade80;
+    --red: #f87171;
+  }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.011em;
+  }
+  ::-webkit-scrollbar { display: none; }
+  * { scrollbar-width: none; }
+  svg { display: block; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; padding: 0; }
+
+  .app {
+    max-width: 460px;
+    margin: 0 auto;
+    min-height: 100dvh;
+    padding-bottom: 40px;
+  }
+  @media (min-width: 480px) {
+    .app {
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+  }
+
+  /* HEADER */
+  .header {
+    padding: 22px 20px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .user { display: flex; align-items: center; gap: 11px; }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #2a2a2a 0%, #0f0f0f 100%);
+    border: 1px solid var(--border-2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600;
+  }
+  .user-greet { font-size: 11.5px; color: var(--text-3); font-weight: 500; }
+  .user-name { font-size: 14.5px; font-weight: 600; letter-spacing: -0.015em; }
+  .icon-btn {
+    width: 40px; height: 40px; border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-2); position: relative;
+  }
+  .icon-btn svg { width: 17px; height: 17px; stroke-width: 1.75; }
+  .dot-badge {
+    position: absolute; top: 9px; right: 9px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--bg);
+  }
+
+  /* CONTENT */
+  .content { padding: 0 20px; }
+
+  /* BALANCE */
+  .balance {
+    padding: 26px 22px; border-radius: 20px;
+    background:
+      radial-gradient(120% 100% at 50% 0%, rgba(255,255,255,0.045) 0%, transparent 60%),
+      var(--surface);
+    border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .balance::before {
+    content: ''; position: absolute; top: 0; left: 20%;
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+  }
+  .balance-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+    color: var(--text-3); font-weight: 500; margin-bottom: 12px;
+  }
+  .balance-amount {
+    font-size: 34px; font-weight: 600; letter-spacing: -0.04em;
+    line-height: 1.05; font-variant-numeric: tabular-nums;
+    background: linear-gradient(180deg, #ffffff 0%, #a8a8a8 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 14px;
+  }
+  .trend {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 9px 4px 7px; border-radius: 999px;
+    background: rgba(74,222,128,0.08);
+    border: 1px solid rgba(74,222,128,0.18);
+    font-size: 11.5px; color: var(--green); font-weight: 500;
+  }
+  .trend svg { width: 11px; height: 11px; stroke-width: 2.5; }
+  .trend-label { color: var(--text-3); margin-left: 8px; font-size: 11.5px; }
+
+  /* QUICK ACTIONS */
+  .quick-actions {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 8px; margin-bottom: 26px;
+  }
+  .qa-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 14px 4px 12px; border-radius: 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-2);
+  }
+  .qa-btn svg { width: 18px; height: 18px; stroke-width: 1.75; }
+  .qa-btn span { font-size: 11px; font-weight: 500; }
+
+  /* SECTION */
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-title { font-size: 15px; font-weight: 600; letter-spacing: -0.015em; }
+  .section-link {
+    font-size: 12px; color: var(--text-3); font-weight: 500;
+    display: flex; align-items: center; gap: 3px;
+  }
+  .section-link svg { width: 12px; height: 12px; }
+
+  /* CHART */
+  .chart-card {
+    padding: 20px 18px 16px; border-radius: 18px;
+    background: var(--surface); border: 1px solid var(--border);
+    margin-bottom: 26px;
+  }
+  .chart-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; margin-bottom: 20px;
+  }
+  .chart-amount {
+    font-size: 22px; font-weight: 600; letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums; line-height: 1.1;
+  }
+  .chart-sub { font-size: 11.5px; color: var(--text-3); margin-top: 4px; font-weight: 500; }
+  .chart-pill {
+    padding: 5px 10px; border-radius: 8px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    font-size: 11.5px; color: var(--text-2); font-weight: 500;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .chart-pill svg { width: 11px; height: 11px; }
+  .chart {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 6px; height: 110px;
+  }
+  .chart-col {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; gap: 8px; height: 100%;
+    justify-content: flex-end;
+  }
+  .chart-bar-track { width: 100%; height: 100%; display: flex; align-items: flex-end; }
+  .chart-bar {
+    width: 100%; border-radius: 4px; background: var(--surface-3);
+  }
+  .chart-bar.active { background: linear-gradient(180deg, #fff 0%, #808080 100%); }
+  .chart-label { font-size: 10px; color: var(--text-4); font-weight: 500; }
+  .chart-label.active { color: var(--text-2); }
+
+  /* TRANSACTIONS */
+  .tx-item {
+    display: flex; align-items: center; gap: 13px;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+  }
+  .tx-item:last-child { border-bottom: none; }
+  .tx-icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-2); flex-shrink: 0;
+  }
+  .tx-icon svg { width: 16px; height: 16px; stroke-width: 1.75; }
+  .tx-body { flex: 1; min-width: 0; }
+  .tx-name { font-size: 13.5px; font-weight: 500; margin-bottom: 2px; }
+  .tx-meta { font-size: 11.5px; color: var(--text-3); }
+  .tx-meta span { color: var(--text-4); }
+  .tx-amount {
+    font-size: 13.5px; font-weight: 600;
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .tx-amount.in { color: var(--green); }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 460px;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 7px 2px 6px; border-radius: 12px;
+    color: var(--text-4); position: relative;
+  }
+  .nav-item svg { width: 20px; height: 20px; stroke-width: 1.75; }
+  .nav-item span { font-size: 10px; font-weight: 500; }
+  .nav-item.active { color: var(--text); }
+  .nav-item.active svg { stroke-width: 2.25; }
+  .nav-item.active::before {
+    content: ''; position: absolute; top: 0; left: 50%;
+    transform: translateX(-50%); width: 18px; height: 2px;
+    border-radius: 1px; background: #fff;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="user">
+      <div class="avatar">T</div>
+      <div>
+        <div class="user-greet">Selamat pagi</div>
+        <div class="user-name">Tristan</div>
+      </div>
+    </div>
+    <button class="icon-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+      <span class="dot-badge"></span>
+    </button>
+  </header>
+
+  <main class="content">
+
+    <!-- BALANCE -->
+    <div class="balance">
+      <div class="balance-label">Total Saldo</div>
+      <div class="balance-amount">Rp 12.450.000</div>
+      <div>
+        <span class="trend">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 17l10-10M17 7H9M17 7v8"/>
+          </svg>
+          12,4%
+        </span>
+        <span class="trend-label">dari bulan lalu</span>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="quick-actions">
+      <button class="qa-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 17L17 7M17 7H8M17 7v9"/>
+        </svg>
+        <span>Kirim</span>
+      </button>
+      <button class="qa-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 7L7 17M7 17h9M7 17V8"/>
+        </svg>
+        <span>Terima</span>
+      </button>
+      <button class="qa-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+        <span>Top Up</span>
+      </button>
+      <button class="qa-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="14" rx="2"/>
+          <path d="M3 10h18"/>
+        </svg>
+        <span>Bayar</span>
+      </button>
+    </div>
+
+    <!-- CHART -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-amount">Rp 1.840.000</div>
+          <div class="chart-sub">Pengeluaran minggu ini</div>
+        </div>
+        <div class="chart-pill">
+          <span>7 Hari</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </div>
+      </div>
+      <div class="chart">
+        <div class="chart-col">
+          <div class="chart-bar-track"><div class="chart-bar" style="height: 42%"></div></div>
+          <span class="chart-label">Sen</span>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-track"><div class="chart-bar" style="height: 68%"></div></div>
+          <span class="chart-label">Sel</span>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-track"><div class="chart-bar" style="height: 35%"></div></div>
+          <span class="chart-label">Rab</span>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-track"><div class="chart-bar" style="height: 82%"></div></div>
+          <span class="chart-label">Kam</span>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-track"><div class="chart-bar" style="height: 55%"></div></div>
+          <span class="chart-label">Jum</span>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-track"><div class="chart-bar" style="height: 95%"></div></div>
+          <span class="chart-label">Sab</span>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-track"><div class="chart-bar active" style="height: 62%"></div></div>
+          <span class="chart-label active">Min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="section-head">
+      <h3 class="section-title">Transaksi Terbaru</h3>
+      <span class="section-link">
+        <span>Semua</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </span>
+    </div>
+
+    <div class="tx-item">
+      <div class="tx-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18V5l12-2v13"/>
+          <circle cx="6" cy="18" r="3"/>
+          <circle cx="18" cy="16" r="3"/>
+        </svg>
+      </div>
+      <div class="tx-body">
+        <div class="tx-name">Spotify Premium</div>
+        <div class="tx-meta">Langganan <span>·</span> 09:24</div>
+      </div>
+      <div class="tx-amount">−Rp 54.900</div>
+    </div>
+
+    <div class="tx-item">
+      <div class="tx-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14M19 12l-7 7-7-7"/>
+        </svg>
+      </div>
+      <div class="tx-body">
+        <div class="tx-name">Andi Wijaya</div>
+        <div class="tx-meta">Transfer <span>·</span> 08:15</div>
+      </div>
+      <div class="tx-amount in">+Rp 250.000</div>
+    </div>
+
+    <div class="tx-item">
+      <div class="tx-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+          <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/>
+          <line x1="6" y1="1" x2="6" y2="4"/>
+          <line x1="10" y1="1" x2="10" y2="4"/>
+          <line x1="14" y1="1" x2="14" y2="4"/>
+        </svg>
+      </div>
+      <div class="tx-body">
+        <div class="tx-name">Kopi Kenangan</div>
+        <div class="tx-meta">Makanan <span>·</span> Kemarin</div>
+      </div>
+      <div class="tx-amount">−Rp 22.000</div>
+    </div>
+
+    <div class="tx-item">
+      <div class="tx-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg>
+      </div>
+      <div class="tx-body">
+        <div class="tx-name">Gaji Bulanan</div>
+        <div class="tx-meta">Pemasukan <span>·</span> 1 Okt</div>
+      </div>
+      <div class="tx-amount in">+Rp 8.500.000</div>
+    </div>
+
+    <div class="tx-item">
+      <div class="tx-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="2"/>
+          <line x1="7" y1="2" x2="7" y2="22"/>
+          <line x1="17" y1="2" x2="17" y2="22"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+        </svg>
+      </div>
+      <div class="tx-body">
+        <div class="tx-name">Netflix</div>
+        <div class="tx-meta">Langganan <span>·</span> 30 Sep</div>
+      </div>
+      <div class="tx-amount">−Rp 186.000</div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <span>Beranda</span>
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+      </svg>
+      <span>Statistik</span>
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2"/>
+        <line x1="2" y1="10" x2="22" y2="10"/>
+      </svg>
+      <span>Kartu</span>
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <span>Profil</span>
+    </button>
+  </nav>
+
+</div>
+
+</body>
+</html>
