@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 20% 10%, #17356b 0, transparent 35%),
+        radial-gradient(circle at 90% 80%, #32145c 0, transparent 35%),
+        #070b16;
+    color: white;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #00eaff;
+}
+
+.menu {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    border: 1px solid #263657;
+    background: rgba(20,30,52,.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+/* HERO */
+.hero {
+    padding: 25px;
+    border-radius: 25px;
+    border: 1px solid #24375d;
+    background: rgba(15,23,42,.72);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 15px 50px rgba(0,0,0,.25);
+    margin-bottom: 18px;
+}
+
+.small {
+    color: #7e8da8;
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+.hero h1 {
+    font-size: clamp(27px, 7vw, 42px);
+    margin-bottom: 10px;
+}
+
+.hero h1 span {
+    color: #00eaff;
+}
+
+.hero p {
+    color: #8e9bb3;
+    line-height: 1.6;
+}
+
+.clock {
+    margin-top: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* STATS */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.card {
+    padding: 18px;
+    border-radius: 20px;
+    border: 1px solid #253654;
+    background: rgba(15,23,42,.7);
+}
+
+.icon {
+    font-size: 23px;
+    margin-bottom: 12px;
+}
+
+.number {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.label {
+    color: #7e8da8;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* SECTION */
+.section {
+    padding: 20px;
+    border-radius: 22px;
+    border: 1px solid #253654;
+    background: rgba(15,23,42,.7);
+    margin-bottom: 18px;
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.section-title h2 {
+    font-size: 18px;
+}
+
+.section-title span {
+    color: #00eaff;
+    font-size: 13px;
+}
+
+/* PROGRESS */
+.progress-box {
+    margin-bottom: 18px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.progress-info span:last-child {
+    color: #00eaff;
+}
+
+.progress {
+    width: 100%;
+    height: 9px;
+    background: #182238;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.bar {
+    height: 100%;
+    width: 0;
+    border-radius: 20px;
+    background: linear-gradient(90deg,#00eaff,#7c4dff);
+    transition: width 1.5s ease;
+}
+
+/* BUTTONS */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 12px;
+}
+
+button {
+    border: 0;
+    padding: 15px;
+    border-radius: 16px;
+    color: white;
+    background: #17243d;
+    border: 1px solid #2a3d61;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    background: #203252;
+}
+
+button.primary {
+    background: linear-gradient(135deg,#00bcd4,#5865f2);
+    border: none;
+}
+
+/* ACTIVITY */
+.activity {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px 0;
+    border-bottom: 1px solid #1b2941;
+}
+
+.activity:last-child {
+    border-bottom: none;
+}
+
+.dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #00eaff;
+    box-shadow: 0 0 12px #00eaff;
+}
+
+.activity-text {
+    flex: 1;
+}
+
+.activity-text b {
+    font-size: 14px;
+}
+
+.activity-text p {
+    color: #71809a;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.time {
+    color: #687791;
+    font-size: 11px;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    color: #59677f;
+    font-size: 12px;
+    padding: 10px 0 20px;
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 25px;
+    transform: translate(-50%, 100px);
+    background: #101a2c;
+    border: 1px solid #2b4169;
+    padding: 13px 20px;
+    border-radius: 14px;
+    color: white;
+    opacity: 0;
+    transition: .35s;
+    z-index: 99;
+    white-space: nowrap;
+}
+
+.toast.show {
+    transform: translate(-50%, 0);
+    opacity: 1;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    body {
+        padding: 14px;
+    }
+
+    .stats {
+        gap: 8px;
+    }
+
+    .card {
+        padding: 14px 10px;
+    }
+
+    .number {
+        font-size: 21px;
+    }
+
+    .hero {
+        padding: 21px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="logo">NEX<span>US</span></div>
+        <div class="menu">☰</div>
+    </header>
+
+    <section class="hero">
+        <div class="small">MONDAY • 05 OCTOBER 2026</div>
+
+        <h1>Good Morning, <span>Broku!</span> 👋</h1>
+
+        <p>
+            Welcome back to your personal dashboard.
+            Keep building something awesome today.
+        </p>
+
+        <div class="clock" id="clock">00:00:00</div>
+    </section>
+
+    <section class="stats">
+
+        <div class="card">
+            <div class="icon">⚡</div>
+            <div class="number">87%</div>
+            <div class="label">ENERGY</div>
+        </div>
+
+        <div class="card">
+            <div class="icon">🎯</div>
+            <div class="number">12</div>
+            <div class="label">TASKS</div>
+        </div>
+
+        <div class="card">
+            <div class="icon">🔥</div>
+            <div class="number">7</div>
+            <div class="label">STREAK</div>
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="section-title">
+            <h2>Today's Progress</h2>
+            <span>75%</span>
+        </div>
+
+        <div class="progress-box">
+            <div class="progress-info">
+                <span>Learning</span>
+                <span>90%</span>
+            </div>
+
+            <div class="progress">
+                <div class="bar" data-width="90%"></div>
+            </div>
+        </div>
+
+        <div class="progress-box">
+            <div class="progress-info">
+                <span>Projects</span>
+                <span>72%</span>
+            </div>
+
+            <div class="progress">
+                <div class="bar" data-width="72%"></div>
+            </div>
+        </div>
+
+        <div class="progress-box">
+            <div class="progress-info">
+                <span>Gaming</span>
+                <span>63%</span>
+            </div>
+
+            <div class="progress">
+                <div class="bar" data-width="63%"></div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="section-title">
+            <h2>Quick Action</h2>
+            <span>4 actions</span>
+        </div>
+
+        <div class="buttons">
+            <button class="primary" onclick="showToast('🚀 Let’s build something!')">
+                🚀 Start Project
+            </button>
+
+            <button onclick="showToast('📚 Keep learning, broku!')">
+                📚 Learn
+            </button>
+
+            <button onclick="showToast('🎮 Gaming mode activated!')">
+                🎮 Gaming
+            </button>
+
+            <button onclick="showToast('⚙️ Settings opened!')">
+                ⚙️ Settings
+            </button>
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="section-title">
+            <h2>Recent Activity</h2>
+            <span>Live</span>
+        </div>
+
+        <div class="activity">
+            <div class="dot"></div>
+
+            <div class="activity-text">
+                <b>Website project updated</b>
+                <p>Homepage design completed</p>
+            </div>
+
+            <div class="time">08:21</div>
+        </div>
+
+        <div class="activity">
+            <div class="dot"></div>
+
+            <div class="activity-text">
+                <b>Learning session</b>
+                <p>HTML & CSS practice</p>
+            </div>
+
+            <div class="time">07:45</div>
+        </div>
+
+        <div class="activity">
+            <div class="dot"></div>
+
+            <div class="activity-text">
+                <b>Daily streak continued</b>
+                <p>7 days in a row 🔥</p>
+            </div>
+
+            <div class="time">07:10</div>
+        </div>
+
+    </section>
+
+    <footer>
+        Made with ❤️ & code • NEXUS Dashboard
+    </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* CLOCK */
+function updateClock() {
+    const now = new Date();
+
+    let h = String(now.getHours()).padStart(2, '0');
+    let m = String(now.getMinutes()).padStart(2, '0');
+    let s = String(now.getSeconds()).padStart(2, '0');
+
+    document.getElementById("clock").textContent =
+        `${h}:${m}:${s}`;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+
+/* PROGRESS ANIMATION */
+window.addEventListener("load", () => {
+
+    document.querySelectorAll(".bar").forEach(bar => {
+        setTimeout(() => {
+            bar.style.width = bar.dataset.width;
+        }, 300);
+    });
+
+});
+
+
+/* TOAST */
+let toastTimer;
+
+function showToast(message) {
+
+    const toast = document.getElementById("toast");
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2200);
+}
+
+</script>
+
+</body>
+</html>
